@@ -1,11 +1,7 @@
-# ESPHOME-ITHO
- ESPHOME version of the ESPEASY-ITHO plugin. This is code i reworked form https://github.com/CoMPaTech/esphome_c1101 
- The code missed some things i had available in the ESPEASY ITHO plugin
- 
- Added:
- - Timer value is counting down when a timer function is activated
- - Extra textsensor to identify the device that had issued the state change of the fan.
- 
- 
- 
- 
+ESPHOME-Orcon
+
+Reworked to support Orcon. 
+Orcon support Based on https://github.com/letscontrolit/ESPEasy (plugin 118 + lib/itho)
+
+Change srcID to 15RF control, convert bytes from hex to dec
+Change destID to Orcon box, ID is on sticker inside the box. Convert bytes from hex to dec
