@@ -7,7 +7,7 @@
 // default constructor
 CC1101::CC1101(int8_t CSpin, int8_t MISOpin) : _CSpin(CSpin), _MISOpin(MISOpin)
 {
-  // SPI.begin(); // Done already by ESPEasy
+  SPI.begin();
   pinMode(_CSpin, OUTPUT);
 } // CC1101
 
