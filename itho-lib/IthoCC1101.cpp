@@ -340,47 +340,49 @@ bool IthoCC1101::parseMessageCommand() {
   inIthoPacket.command = IthoUnknown;
 
   // TODO: When enabling CRC_FILTER, most likely commands without SET_MLEN() need that check too
-  if (checkIthoCommand(&inIthoPacket, ithoMessageHighCommandBytes)) {
-    inIthoPacket.command = IthoHigh;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVHighCommandBytes)) {
-    inIthoPacket.command = IthoHigh;
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageMediumCommandBytes)) {
-    inIthoPacket.command = IthoMedium;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVMediumCommandBytes)) {
-    inIthoPacket.command = IthoMedium;
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageLowCommandBytes)) {
-    inIthoPacket.command = IthoLow;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVLowCommandBytes)) {
-    inIthoPacket.command = IthoLow;
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVAutoCommandBytes)) {
-    inIthoPacket.command = IthoStandby;
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageStandByCommandBytes)) {
-    inIthoPacket.command = IthoStandby;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer1CommandBytes)) {
-    inIthoPacket.command = IthoTimer1;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer2CommandBytes)) {
-    inIthoPacket.command = IthoTimer2;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer3CommandBytes)) {
-    inIthoPacket.command = IthoTimer3;
-    SET_MLEN(11)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageJoinCommandBytes)) {
-    inIthoPacket.command = IthoJoin;
-    SET_MLEN(20)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageJoin2CommandBytes)) {
-    inIthoPacket.command = IthoJoin;
-    SET_MLEN(20)
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVJoinCommandBytes)) {
-    inIthoPacket.command = IthoJoin;
-  } else if (checkIthoCommand(&inIthoPacket, ithoMessageLeaveCommandBytes)) {
-    inIthoPacket.command = IthoLeave;
-    SET_MLEN(14)
-  } else if (_enableOrcon) {
+  if (!_enableOrcon) {
+    if (checkIthoCommand(&inIthoPacket, ithoMessageHighCommandBytes)) {
+      inIthoPacket.command = IthoHigh;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVHighCommandBytes)) {
+      inIthoPacket.command = IthoHigh;
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageMediumCommandBytes)) {
+      inIthoPacket.command = IthoMedium;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVMediumCommandBytes)) {
+      inIthoPacket.command = IthoMedium;
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageLowCommandBytes)) {
+      inIthoPacket.command = IthoLow;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVLowCommandBytes)) {
+      inIthoPacket.command = IthoLow;
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVAutoCommandBytes)) {
+      inIthoPacket.command = IthoStandby;
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageStandByCommandBytes)) {
+      inIthoPacket.command = IthoStandby;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer1CommandBytes)) {
+      inIthoPacket.command = IthoTimer1;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer2CommandBytes)) {
+      inIthoPacket.command = IthoTimer2;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageTimer3CommandBytes)) {
+      inIthoPacket.command = IthoTimer3;
+      SET_MLEN(11)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageJoinCommandBytes)) {
+      inIthoPacket.command = IthoJoin;
+      SET_MLEN(20)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageJoin2CommandBytes)) {
+      inIthoPacket.command = IthoJoin;
+      SET_MLEN(20)
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageRVJoinCommandBytes)) {
+      inIthoPacket.command = IthoJoin;
+    } else if (checkIthoCommand(&inIthoPacket, ithoMessageLeaveCommandBytes)) {
+      inIthoPacket.command = IthoLeave;
+      SET_MLEN(14)
+    }
+  } else {
     if (checkIthoCommand(&inIthoPacket, orconMessageStandByCommandBytes)) {
       inIthoPacket.command = OrconStandBy;
     } else if (checkIthoCommand(&inIthoPacket, orconMessageLowCommandBytes)) {
