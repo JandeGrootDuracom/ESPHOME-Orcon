@@ -4,23 +4,27 @@ esphome:
     - itho.h
   libraries: 
     - SPI
-    - https://github.com/jodur/ITHO-Lib#NewLib
- 
- #Set ID from remotes that are used, so you can identify the root of the last State change
+    - file:///config/esphome/itho-lib
+
   on_boot:
     then:
       - lambda: |-
           Idlist[0]={"51,40,61","Badkamer"};
           Idlist[1]={"73,82,11","Toilet"};
           Idlist[2]={"ID3","ID3"};
+          srcID[0] = 81;
+          srcID[1] = 64;
+          srcID[2] = 97;
+          destID[0] = 118;
+          destID[1] = 36;
+          destID[2] = 148;
           Mydeviceid="Homeassistant"; 
-          rf.setDeviceID(10,87,81); //ID for sending: 10,87,81 was used in old library
-          id(swfan_low).turn_on(); //This ensures fan is at low-speed at boot
+
 esp8266:
   board: d1_mini
   framework:
     version: recommended
-                    
+
 wifi:
   ssid: <YOURSSID>
   password: <YOURPASSWORD>
@@ -40,27 +44,29 @@ logger:
 api:
 
 ota:
-  on_begin:
-    then:
-      - lambda: |-
-          ESP_LOGI("custom", "Disable Interrupts, to allow OTA without intterupts");
-          detachInterrupt(D1);
-          delay(500);
 
 switch:
 - platform: custom
   lambda: |-
-    auto fansendlow = new FanSendLow();
+    auto fansendstandby = new FanSendOrconStandBy();
+    App.register_component(fansendstandby);
+    return {fansendstandby};
+
+  switches:
+    name: "FanSendStandby"
+
+- platform: custom
+  lambda: |-
+    auto fansendlow = new FanSendOrconLow();
     App.register_component(fansendlow);
     return {fansendlow};
 
   switches:
     name: "FanSendLow"
-    id: swfan_low
 
 - platform: custom
   lambda: |-
-    auto fansendmedium = new FanSendMedium();
+    auto fansendmedium = new FanSendOrconMedium();
     App.register_component(fansendmedium);
     return {fansendmedium};
 
@@ -69,7 +75,7 @@ switch:
 
 - platform: custom
   lambda: |-
-    auto fansendhigh = new FanSendHigh();
+    auto fansendhigh = new FanSendOrconHigh();
     App.register_component(fansendhigh);
     return {fansendhigh};
 
@@ -78,38 +84,12 @@ switch:
 
 - platform: custom
   lambda: |-
-    auto fansendt1 = new FanSendIthoTimer1();
-    App.register_component(fansendt1);
-    return {fansendt1};
+    auto fansendauto = new FanSendOrconAuto();
+    App.register_component(fansendauto);
+    return {fansendauto};
 
   switches:
-    name: "FanSendTimer1"
-
-- platform: custom
-  lambda: |-
-    auto fansendt2 = new FanSendIthoTimer2();
-    App.register_component(fansendt2);
-    return {fansendt2};
-
-  switches:
-    name: "FanSendTimer2"
-
-- platform: custom
-  lambda: |-
-    auto fansendt3 = new FanSendIthoTimer3();
-    App.register_component(fansendt3);
-    return {fansendt3};
-
-  switches:
-    name: "FanSendTimer3"
-
-- platform: custom
-  lambda: |-
-    auto fansendjoin = new FanSendIthoJoin();
-    App.register_component(fansendjoin);
-    return {fansendjoin};
-  switches:
-    name: "FanSendJoin"
+    name: "FanSendAuto"
 
 text_sensor:
 - platform: custom
@@ -123,8 +103,3 @@ text_sensor:
     - name: "fantimer"
       icon: "mdi:timer"  
     - name: "lastid"
-
-  
-      
-
- 
